@@ -1,7 +1,7 @@
 #include "raylib.h" // 화면을 그리는 데 필요한 기능들이 구현되어 있는 헤더 파일
 
 // 화면에 그릴 수 있는 여러가지는 https://www.raylib.com/cheatsheet/cheatsheet.html 사이트를 참고하세요
-// 빌드 결과 .exe 파일은 "CPP_Practice_Game/bin/Debug 또는 Release 폴더 안에 들어가게 되어 있습니다.
+// 빌드 결과 .exe 파일은 "CPP_Practice_Game/bin/Debug폴더 안에 들어가게 되어 있습니다.
 
 int main() {
 	// 화면의 가로 및 세로 크기
