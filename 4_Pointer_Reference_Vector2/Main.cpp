@@ -27,7 +27,7 @@ void DrawEnemy(const Vector2* const enemyPosition, int enemyCount, int enemyRadi
 {
 	for (int i = 0; i < enemyCount; i++)
 	{
-		DrawCircle(enemyPosition[i].x, enemyPosition[i].y, enemyRadius, enemyColor); //인자로 받은 데이터와 Global 변수인 데이터를 식별해 보세요.
+		DrawCircle(enemyPosition[i].x, enemyPosition[i].y, enemyRadius, enemyColor); 
 	}
 }
 

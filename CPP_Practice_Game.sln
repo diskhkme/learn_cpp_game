@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3_Function_Enemies", "3_Fun
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4_Pointer_Reference_Vector2", "4_Pointer_Reference_Vector2\4_Pointer_Reference_Vector2.vcxproj", "{5A8AE58B-25BD-445D-A785-C15E9E6C0F93}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5_Pointer_Reference_MovingEnemies", "5_Pointer_Reference_MovingEnemies\5_Pointer_Reference_MovingEnemies.vcxproj", "{F7BE730B-14C7-48CF-8195-57A10C567BA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -59,6 +61,14 @@ Global
 		{5A8AE58B-25BD-445D-A785-C15E9E6C0F93}.Release|x64.Build.0 = Release|x64
 		{5A8AE58B-25BD-445D-A785-C15E9E6C0F93}.Release|x86.ActiveCfg = Release|Win32
 		{5A8AE58B-25BD-445D-A785-C15E9E6C0F93}.Release|x86.Build.0 = Release|Win32
+		{F7BE730B-14C7-48CF-8195-57A10C567BA5}.Debug|x64.ActiveCfg = Debug|x64
+		{F7BE730B-14C7-48CF-8195-57A10C567BA5}.Debug|x64.Build.0 = Debug|x64
+		{F7BE730B-14C7-48CF-8195-57A10C567BA5}.Debug|x86.ActiveCfg = Debug|Win32
+		{F7BE730B-14C7-48CF-8195-57A10C567BA5}.Debug|x86.Build.0 = Debug|Win32
+		{F7BE730B-14C7-48CF-8195-57A10C567BA5}.Release|x64.ActiveCfg = Release|x64
+		{F7BE730B-14C7-48CF-8195-57A10C567BA5}.Release|x64.Build.0 = Release|x64
+		{F7BE730B-14C7-48CF-8195-57A10C567BA5}.Release|x86.ActiveCfg = Release|Win32
+		{F7BE730B-14C7-48CF-8195-57A10C567BA5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
