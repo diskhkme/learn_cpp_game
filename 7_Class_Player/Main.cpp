@@ -46,14 +46,14 @@ bool CheckCollision(const Vector2& myPosition, int myRadius, const Vector2& othe
 	return false;
 }
 
-void HandleCollision(Vector2& myPosition, int myRadius, const Vector2& otherPosition, int otherRadius) 
+void PushCollidingObject(Vector2& myPosition, int myRadius, const Vector2& otherPosition, int otherRadius)
 {
 	Vector2 otherToMeDir = Vector2Normalize(Vector2Subtract(myPosition, otherPosition));
 	Vector2 otherToMeVectorAdjusted = Vector2Scale(otherToMeDir, myRadius + otherRadius);
 	myPosition = Vector2Add(otherPosition, otherToMeVectorAdjusted);
 }
 
-void UpdateEnemy(Vector2* const enemyPosition, int enemyCount, int enemyRadius, const Vector2& playerPosition)
+void HandleCollision(Vector2* const enemyPosition, int enemyCount, int enemyRadius, const Vector2& playerPosition)
 {
 	for (int i = 0; i < enemyCount; i++)
 	{
@@ -69,7 +69,7 @@ void UpdateEnemy(Vector2* const enemyPosition, int enemyCount, int enemyRadius, 
 			{
 				if (CheckCollisionCircles(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius))
 				{
-					HandleCollision(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius); 
+					PushCollidingObject(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius);
 				}
 			}
 
@@ -118,7 +118,7 @@ int main() {
 	while (!WindowShouldClose())
 	{
 		player.Update(); // Player 클래스의 Update 함수를 호출하면, 기존의 UpdatePlayer와 동일하게 동작합니다.
-		UpdateEnemy(enemyPosition, enemyCount, enemyRadius, player.GetPosition()); // 충돌 계산에 필요한 playerPosition도 멤버함수로 만들어 두었습니다.
+		HandleCollision(enemyPosition, enemyCount, enemyRadius, player.GetPosition()); // 충돌 계산에 필요한 playerPosition도 멤버함수로 만들어 두었습니다.
 
 		BeginDrawing();
 
@@ -129,6 +129,11 @@ int main() {
 		DrawFPS(10, 10);
 
 		EndDrawing();
+	}
+
+	{
+		delete[] enemyPosition;
+
 	}
 
 	return 0;

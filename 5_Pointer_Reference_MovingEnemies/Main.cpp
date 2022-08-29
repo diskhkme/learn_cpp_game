@@ -90,6 +90,11 @@ int main() {
 		EndDrawing();
 	}
 
+	{
+		delete[] enemyPosition;
+
+	}
+
 	return 0;
 }
 

@@ -23,7 +23,7 @@ bool CheckCollision(const Vector2& myPosition, int myRadius, const Vector2& othe
 	return false;
 }
 
-void HandleCollision(Vector2& myPosition, int myRadius, const Vector2& otherPosition, int otherRadius) // myPosition에 const가 없음에 유의!
+void PushCollidingObject(Vector2& myPosition, int myRadius, const Vector2& otherPosition, int otherRadius) // myPosition에 const가 없음에 유의!
 {
 	// 부딪혔기 때문에, 내 위치를 조정해 부딪히지 않는 위치로 옮깁니다.
 	Vector2 otherToMeDir = Vector2Normalize(Vector2Subtract(myPosition, otherPosition));
@@ -31,7 +31,7 @@ void HandleCollision(Vector2& myPosition, int myRadius, const Vector2& otherPosi
 	myPosition = Vector2Add(otherPosition, otherToMeVectorAdjusted);
 }
 
-void UpdateEnemy(Vector2* const enemyPosition, int enemyCount, int enemyRadius, const Vector2& playerPosition)
+void HandleCollision(Vector2* const enemyPosition, int enemyCount, int enemyRadius, const Vector2& playerPosition)
 {
 	// 적들이 서로 겹치지 않게 움직여줘 보도록 하겠습니다. 두 물체가 충돌(Collision)하는지 판별하는 것은 일반적으로 게임을 만들 때 아주 중요한 기능 요소입니다.
 	for (int i = 0; i < enemyCount; i++)
@@ -48,7 +48,7 @@ void UpdateEnemy(Vector2* const enemyPosition, int enemyCount, int enemyRadius, 
 			{
 				if (CheckCollision(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius)) // 겹치는 적이 있다면
 				{
-					HandleCollision(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius); // 위치를 조정해줍니다.
+					PushCollidingObject(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius); // 위치를 조정해줍니다.
 				}
 			}
 
@@ -107,7 +107,7 @@ int main() {
 	while (!WindowShouldClose())
 	{
 		UpdatePlayer(playerPosition);
-		UpdateEnemy(enemyPosition, enemyCount, enemyRadius, playerPosition); // 충돌 계산에 radius 정보가 필요하니 추가로 넘겨줍니다.
+		HandleCollision(enemyPosition, enemyCount, enemyRadius, playerPosition); // 충돌 계산에 radius 정보가 필요하니 추가로 넘겨줍니다.
 
 		BeginDrawing();
 
@@ -118,6 +118,11 @@ int main() {
 		DrawFPS(10, 10); // 여기서부턴 성능에 영향이 있을지도 모르니, 화면 갱신률(FPS)를 볼 수 있도록 해 줍시다.
 
 		EndDrawing();
+	}
+
+	{
+		delete[] enemyPosition;
+
 	}
 
 	return 0;

@@ -9,7 +9,7 @@
 
 // Player 클래스는 Player.h/Player.cpp로 떠났습니다! Enemy 클래스 또한 마찬가지.
 
-void HandleCollision(Enemy& self, const Enemy& other)
+void PushCollidingObject(Enemy& self, const Enemy& other)
 {
 	Vector2 selfPosition = self.GetPosition();
 	Vector2 otherPosition = other.GetPosition();
@@ -20,7 +20,7 @@ void HandleCollision(Enemy& self, const Enemy& other)
 	self.SetPosition(Vector2Add(otherPosition, otherToMeVectorAdjusted));
 }
 
-void UpdateEnemy(Enemy* const enemies, int enemyCount, const Vector2& playerPosition)
+void HandleCollision(Enemy* const enemies, int enemyCount, const Vector2& playerPosition)
 {
 	for (int i = 0; i < enemyCount; i++)
 	{
@@ -31,7 +31,7 @@ void UpdateEnemy(Enemy* const enemies, int enemyCount, const Vector2& playerPosi
 				// 우리가 만들었던 함수 대신, 라이브러리에서 제공하는 함수를 사용합시다.
 				if (CheckCollisionCircles(enemies[i].GetPosition(), enemies[i].GetRadius(), enemies[j].GetPosition(), enemies[j].GetRadius()))
 				{
-					HandleCollision(enemies[i], enemies[j]);
+					PushCollidingObject(enemies[i], enemies[j]);
 				}
 			}
 
@@ -78,7 +78,7 @@ int main() {
 		{
 			enemies[i].Update(playerPosition);
 		}
-		UpdateEnemy(enemies, enemyCount, playerPosition); // UpdateEnemy함수로 충돌 처리
+		HandleCollision(enemies, enemyCount, playerPosition); // UpdateEnemy함수로 충돌 처리
 
 		BeginDrawing();
 
@@ -92,6 +92,11 @@ int main() {
 		DrawFPS(10, 10);
 
 		EndDrawing();
+	}
+
+	{
+		delete[] enemies;
+
 	}
 
 	return 0;
