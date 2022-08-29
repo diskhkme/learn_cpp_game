@@ -46,8 +46,7 @@ void UpdateEnemy(Vector2* const enemyPosition, int enemyCount, int enemyRadius, 
 		{
 			if (i != j) // 자신이 아닌 다른 적 중에,
 			{
-				//if (CheckCollision(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius)) // 겹치는 적이 있다면
-				if (CheckCollisionCircles(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius)) // 겹치는 적이 있다면
+				if (CheckCollision(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius)) // 겹치는 적이 있다면
 				{
 					HandleCollision(enemyPosition[i], enemyRadius, enemyPosition[j], enemyRadius); // 위치를 조정해줍니다.
 				}

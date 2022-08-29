@@ -29,7 +29,7 @@ public:
 		DrawRectangle(position.x, position.y, size.x, size.y, color);
 		DrawRectangleLines(position.x, position.y, size.x, size.y, BLACK);
 	}
-	Vector2 GetPosition() // 충돌 계산에 플레이어 위치가 필요하니까, 반환해주는 기능을 하나 열어둡니다.
+	Vector2 GetPosition() const// 충돌 계산에 플레이어 위치가 필요하니까, 반환해주는 기능을 하나 열어둡니다.
 	{
 		return position;
 	}
