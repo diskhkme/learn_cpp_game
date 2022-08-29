@@ -42,7 +42,7 @@ int main() {
 	int screenWidth = 800;
 	int screenHeight = 450;
 
-	InitWindow(screenWidth, screenHeight, "2_Function_Player_Movement");
+	InitWindow(screenWidth, screenHeight, "3_Function_Enemies");
 
 	SetTargetFPS(60);
 
