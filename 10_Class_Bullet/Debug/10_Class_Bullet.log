@@ -1,9 +1,0 @@
-﻿  Enemy.cpp
-e:\libs\raylib\learn_cpp_game\10_class_bullet\enemy.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'raylib.h': No such file or directory
-  EnemyManager.cpp
-e:\libs\raylib\learn_cpp_game\10_class_bullet\enemymanager.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'raylib.h': No such file or directory
-  Main.cpp
-e:\libs\raylib\learn_cpp_game\10_class_bullet\main.cpp(1): fatal error C1083: 포함 파일을 열 수 없습니다. 'raylib.h': No such file or directory
-  Player.cpp
-e:\libs\raylib\learn_cpp_game\10_class_bullet\player.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'raylib.h': No such file or directory
-  코드를 생성하고 있습니다...

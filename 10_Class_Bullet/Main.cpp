@@ -12,7 +12,7 @@ int main() {
 	int screenWidth = 800;
 	int screenHeight = 450;
 
-	InitWindow(screenWidth, screenHeight, "9_Class_EnemyManager");
+	InitWindow(screenWidth, screenHeight, "10_Class_Bullet");
 
 	SetTargetFPS(60);
 
@@ -22,7 +22,6 @@ int main() {
 	Player player = Player{ 10,10,20,20,Color{238,108,77,255} };
 
 	//--- 적 관련 데이터
-	// 이제 여러명의 적들을 관리하는 전반적인 기능은 EnemyManger 클래스로 역할을 넘겨주었습니다.
 	EnemyManager enemyManager;
 	const int enemyCount = 10;
 	const float enemyRadius = 10.0f;
@@ -38,15 +37,15 @@ int main() {
 
 	while (!WindowShouldClose())
 	{
-		player.Update(); 
+		player.Update(); // 탄환의 발사 또한 Player 클래스에서 처리해 줍니다.
 		Vector2 playerPosition = player.GetPosition();
-		enemyManager.Update(playerPosition); // 이제는 EnemyManager가 알아서 처리합니다.
+		enemyManager.Update(playerPosition); 
 		
 
 		BeginDrawing();
 
 		ClearBackground(backgroundColor);
-		player.Draw(); // Player 클래스의 Draw 함수를 호출하면, 기존의 DrawPlayer와 동일하게 동작합니다.
+		player.Draw(); 
 		enemyManager.Draw();
 
 		DrawFPS(10, 10);
@@ -59,6 +58,6 @@ int main() {
 
 //--- Practice
 
-// 1. EnemyManger를 수정해서 어떤 Enemy는 삼각형으로, 어떤 enemy는 원으로 그리도록 수정해 보세요.
-// 2. 위와 같이 수정할 때, Collision 관련 내용을 어떻게 수정하면 좋을지 스스로 생각해 보세요.
-// 3. Player의 위치를 계속 인자로 넘겨주지 않고, 좀 더 편리하게 구현할 방법이 있을까요?
+// 1. 자세히 보면 탄환이 플레이어 가운데서 나가는 것이 아니고 왼쪽 위쪽에서 나가는 것을 볼 수 있습니다. 가운데, 또는 다른 적절한 위치에서 발사되도록 수정해 보세요.
+// 2. 탄환을 하나 발사하고, 그 위치를 콘솔창에 출력하거나, 몇초 뒤에 중단점을 걸어서 위치를 확인해보세요. 화면에서 이미 벗어난지 오래입니다. 어떻게 하는것이 좋을까요?
+// 3. 당연하지만 현재는 탄환을 50발 이상 발사하게 되면 exception이 발생합니다. 어떤 해결 방법들이 있을까요?
