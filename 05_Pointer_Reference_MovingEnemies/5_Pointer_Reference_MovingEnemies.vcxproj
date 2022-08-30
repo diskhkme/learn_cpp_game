@@ -20,10 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{78B2F0BD-8B14-4150-8BD4-2BC2D83915B5}</ProjectGuid>
-    <RootNamespace>My2Function</RootNamespace>
+    <ProjectGuid>{F7BE730B-14C7-48CF-8195-57A10C567BA5}</ProjectGuid>
+    <RootNamespace>My5PointerReferenceMovingEnemies</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
-    <ProjectName>2_Function_Player_Movement</ProjectName>
+    <ProjectName>05_Pointer_Reference_MovingEnemies</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

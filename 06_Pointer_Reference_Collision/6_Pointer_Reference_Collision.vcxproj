@@ -20,9 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{150EE6A3-107C-43DC-8E7A-96056F7C1A89}</ProjectGuid>
-    <RootNamespace>My3FunctionEnemies</RootNamespace>
+    <ProjectGuid>{5CBD2EFF-40C6-4B43-87A1-691D051C2929}</ProjectGuid>
+    <RootNamespace>My6PointerReferenceCollision</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>06_Pointer_Reference_Collision</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -20,9 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{1E09B8EB-CB06-45DC-A00C-AC9FB8A0BB31}</ProjectGuid>
-    <RootNamespace>My7ClassPlayer</RootNamespace>
+    <ProjectGuid>{78B2F0BD-8B14-4150-8BD4-2BC2D83915B5}</ProjectGuid>
+    <RootNamespace>My2Function</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>02_Function_Player_Movement</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
