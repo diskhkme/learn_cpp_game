@@ -10,7 +10,7 @@ private:
 	Color color;
 
 public:
-	Player(float x, float y, float width, float height, Color color);
+	Player(float x, float y, float width, float height, const Color& color);
 
 	void Update();
 	void Draw() const;

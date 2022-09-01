@@ -6,7 +6,7 @@ Enemy::Enemy()
 	: Enemy{ 0,0,0,BLACK }
 {}
 
-Enemy::Enemy(float x, float y, float radius, Color color)
+Enemy::Enemy(float x, float y, float radius, const Color& color)
 	: position{ Vector2{x,y} }, radius{ radius }, color{ color }
 {}
 
@@ -35,7 +35,7 @@ Vector2 Enemy::GetPosition() const
 	return position;
 }
 
-void Enemy::SetPosition(Vector2 pos)
+void Enemy::SetPosition(const Vector2& pos)
 {
 	position = pos;
 }

@@ -2,7 +2,7 @@
 
 #include "raymath.h"
 
-Bullet::Bullet(Vector2 startPosition, Vector2 direction, float speed, float radius, Color color)
+Bullet::Bullet(const Vector2& startPosition, const Vector2& direction, float speed, float radius, const Color& color)
 	: currentPosition{ startPosition }, shootDirection{ Vector2Normalize(direction) }, radius{ radius }, speed{ speed }, color{ color }
 {
 	// 방향 벡터는 단위 벡터(길이가 1인 벡터)로 저장할 예정입니다.

@@ -18,7 +18,7 @@ private:
 	float speed;
 public:
 	// 초기에 생성할때는 시작 위치와 방향을 넣어줍니다.
-	Bullet(Vector2 startPosition, Vector2 direction, float speed, float radius,  Color color);
+	Bullet(const Vector2& startPosition, const Vector2& direction, float speed, float radius, const Color& color);
 
 	void Update();
 	void Draw() const;

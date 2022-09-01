@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(float x, float y, float width, float height, Color color)
+Player::Player(float x, float y, float width, float height, const Color& color)
 	: position{ Vector2{x,y} }, size{ Vector2{width,height} }, color{ color }
 {}
 

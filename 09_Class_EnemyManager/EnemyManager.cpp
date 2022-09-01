@@ -15,7 +15,7 @@ EnemyManager::~EnemyManager()
 	}
 }
 
-void EnemyManager::SpawnEnemy(Vector2 position, float radius, const Color & color)
+void EnemyManager::SpawnEnemy(const Vector2& position, float radius, const Color & color)
 {
 	enemies[enemyCount] = new Enemy{ position.x, position.y, radius, color };
 	enemyCount++;
@@ -62,7 +62,7 @@ void EnemyManager::HandleCollision()
 	}
 }
 
-void EnemyManager::PushCollidingObject(Enemy* self, Enemy* other)
+void EnemyManager::PushCollidingObject(Enemy* self, const Enemy* const other)
 {
 	Vector2 selfPosition = self->GetPosition();
 	Vector2 otherPosition = other->GetPosition();

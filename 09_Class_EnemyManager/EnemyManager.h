@@ -10,12 +10,12 @@ public:
 	EnemyManager();
 	~EnemyManager(); // 포인터를 멤버로 가지고 있기 때문에, 소멸자를 잊지 마세요!
 
-	void SpawnEnemy(Vector2 position, float radius, const Color& color);
+	void SpawnEnemy(const Vector2& position, float radius, const Color& color);
 	void Update(const Vector2& playerPosition);
 	void Draw() const;
 private:
 	void HandleCollision();
-	void PushCollidingObject(Enemy* self, Enemy* other);
+	void PushCollidingObject(Enemy* self, const Enemy* const other);
 
 private:
 	// (주의!) 지금까지는 Enemy들을 한꺼번에 생성했지만, 이제는 Enemy를 하나씩 만들 수 있도록 자유도를 높일 것입니다.
