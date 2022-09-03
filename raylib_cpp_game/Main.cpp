@@ -4,25 +4,44 @@
 // 화면에 그릴 수 있는 여러가지는 https://www.raylib.com/cheatsheet/cheatsheet.html 사이트를 참고하세요
 // 빌드 결과 .exe 파일은 "CPP_Practice_Game/bin/Debug 또는 Release 폴더 안에 들어가게 되어 있습니다.
 
-
-// 플레이어의 이동 관련한 연산을 모두 이곳에 모아 놓으면 보기가 좋겠죠?
-void UpdatePlayer(float tick, float playerSpeed, Vector2& playerPosition)
+// 플레이어 클래스
+class Player
 {
-	// tick을 사용해 속도를 맞추어 주는것은 아주 간단합니다. 바꾸고 싶은 값에다 tick을 곱해주면 됩니다.
-	// 프레임마다 2*tick만큼 움직인다고 하면, 
-	// 60FPS일땐 한 프레임에 2/60만큼씩 움직이고, 1초가 지나면 2만큼 이동하게 됩니다.
-	// 144FPS일땐 한 프레임에 2/144만큼씩 움직이고, 1초가 지나면 동일하게 2만큼 이동하게 됩니다.
+public:
+	Player(const Vector2& position, const Vector2& size, const Color& color, float speed)
+		: position{ position }, size{ size }, color{color}, speed{speed}
+	{}
+	void Update(float tick) // tick만 인자로 받으면 되는 아주 깔끔한 모양새가 되었습니다!
+	{
+		Move(tick);
+	}
+	void Draw() const // 플레이어 그리기
+	{
+		DrawRectangle(position.x, position.y, size.x, size.y, color); 
+		DrawRectangleLines(position.x, position.y, size.x, size.y, BLACK); // 테두리 그리기
+	}
+	Vector2 GetPosition()
+	{
+		// 적이 플레이어쪽으로 움직이려면 플레이어 위치값이 필요합니다. 반환해 줄 수 있는 통로를 만들어 줍니다.
+		return position;
+	}
 	
-	// 이전 코드에서는 프레임마다 2만큼 이동하였으니 결과적으로 1초에 대략 2*60만큼 이동했습니다.
-	// 따라서 지금 코드에서 유사하게 동작하게 하려면 속도를 약 120으로 해주어야 할겁니다.
-	// 이 숫자도 외부에서 매개변수로 받도록 수정합니다.
+private:
+	void Move(float tick) // Move 함수는 굳이 외부로 노출할 필요가 없습니다.
+	{
+		if (IsKeyDown(KEY_D)) position.x += speed * tick;
+		else if (IsKeyDown(KEY_A)) position.x -= speed * tick;
 
-	if (IsKeyDown(KEY_D)) playerPosition.x += playerSpeed * tick;
-	else if (IsKeyDown(KEY_A)) playerPosition.x -= playerSpeed * tick;
+		if (IsKeyDown(KEY_W)) position.y -= speed * tick;
+		else if (IsKeyDown(KEY_S)) position.y += speed * tick;
+	}
 
-	if (IsKeyDown(KEY_W)) playerPosition.y -= playerSpeed * tick;
-	else if (IsKeyDown(KEY_S)) playerPosition.y += playerSpeed * tick;
-}
+private:
+	Vector2 position;
+	Vector2 size;
+	Color color;
+	float speed;
+};
 
 void UpdateEnemy(float tick, float enemySpeed, Vector2* enemyPosition, int enemyCount, const Vector2& playerPosition)
 {
@@ -70,13 +89,8 @@ int main() {
 	SetTargetFPS(60); // 화면을 1초에 몇번 그릴 것인지 (보통은 60번을 사용함. 60 fps(frames per second)
 
 	//--- 화면에 그릴 플레이어 관련 변수
-	// Vector2는 기존에 사용하던 Color처럼, 2개의 float 변수를 담을 수 있는 구조체입니다.
-	// Vector2를 사용하면 코드를 조금 더 깔끔하게 정리할 수 있습니다. 
-	// 2개의 값은 각각 .x, .y를 사용해 접근할 수 있습니다.
-	Vector2 playerPosition = Vector2{ 10,10 };
-	const Vector2 playerSize = Vector2{ 20,20 };
-	const Color playerColor = Color{ 238, 108, 77, 255 };
-	const float playerSpeed = 120.0f;
+	// 클래스로 데이터를 묶어놓았으니 아주 깔끔해집니다.
+	Player player = Player{ Vector2{10,10}, Vector2{20,20}, Color{238, 108, 77, 255}, 120.0f };
 
 	//--- 화면에 그릴 적 관련 변수
 	const float enemyCount = 10; // 적은 10 마리를 그릴 예정입니다. 배열 크기로 사용하기 위해 const 여야 한다는 것을 잊지 마세요
@@ -99,20 +113,12 @@ int main() {
 	// 창을 닫을 때까지 while 반복문을 돌면서 화면을 그리기 위한 함수들을 호출
 	while (!WindowShouldClose())
 	{
-		// 일반적으로 게임을 만들때 loop 안에서는 데이터 조작과 조작된 데이터를 기반으로 한 화면 그리기를 수행합니다.
-		// 여기에서도 이렇게 두 부분으로 구분해서 구현할 것이며, 중괄호, 들여쓰기 등은 문법적으로 의미는 없고, 보기 좋게 하기위해 들어간 것입니다.
-
 		{ // 데이터 조작 (Update)
-			// 일반적으로 게임에서 "시간"의 고려는 매우 중요합니다. 간단한 예로 살펴 보겠습니다.
-			// 이전 코드에서 위의 SetTargetFPS(144)로 코드를 바꿔보셨다면 게임 전체 속도가 빨라지는 것을 볼 수 있습니다.
-			// 프레임 속도가 빨라진다고 게임 자체가 빨라지는 것은 올바르지 않습니다.
-			// 따라서 프레임 속도를 반영해서 캐릭터들을 움직여야 하고, 이를 위해서는 매 while문마다 시간이 얼마나 흘렀는지 알아야 합니다.
-			// 이러한 기능이 꼭 필요하기 때문에 일반적으로 게임 엔진에서는 while문이 한번 돌때마다 시간이 얼마나 걸렸는지를 반환해 줍니다.
+			
 			float tick = GetFrameTime(); // FPS가 60이라면 1/60, 144라면 1/144에 가까운 값이 반환됩니다.
 
-			// tick값을 Update함수들에 인자로 넣어줍니다. speed도 매개변수로 추가해 주었습니다.
-			UpdatePlayer(tick, playerSpeed, playerPosition);
-			UpdateEnemy(tick, enemySpeed, enemyPosition, enemyCount, playerPosition);
+			player.Update(tick);
+			UpdateEnemy(tick, enemySpeed, enemyPosition, enemyCount, player.GetPosition());
 		}
 
 		{ // 그리기 (Draw)
@@ -120,7 +126,7 @@ int main() {
 
 			ClearBackground(backgroundColor); // 배경 그리기
 
-			DrawRectangle(playerPosition.x, playerPosition.y, playerSize.x, playerSize.y, playerColor); // 플레이어 그리기
+			player.Draw(); // 플레이어 그리기
 
 			DrawEnemy(enemyPosition, enemyCount, enemyRadius, enemyColor); // 적 그리기
 
@@ -138,4 +144,6 @@ int main() {
 
 //--- Practice
 
-// 1. tick을 이동 속도에 올바로 반영하고 나면, SetTargetFPS()의 숫자가 얼마던간 동일한 속도로 움직입니다. 직접 확인해보세요.
+// 1. Player에게 name 멤버변수를 만들어서 플레이어 머리 위에 이름이 표시되도록 해 보세요.
+// 2. 강의 자료를 참고하여 Player 클래스의 구현을 Player.h/Player.cpp에 나누어서 구현해 보세요.
+// 3. Enemy 클래스를 만들고 Player 클래스를 추가한 것처럼 코드를 바꾸어 보세요.
