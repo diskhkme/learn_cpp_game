@@ -6,18 +6,25 @@
 
 
 // 플레이어의 이동 관련한 연산을 모두 이곳에 모아 놓으면 보기가 좋겠죠?
-void UpdatePlayer(Vector2& playerPosition)
+void UpdatePlayer(float tick, float playerSpeed, Vector2& playerPosition)
 {
-	// IsKeyDown(keyCode) 함수를 사용하면, 해당 키보드가 눌렸는지 여부를 bool로 반환해줍니다.
+	// tick을 사용해 속도를 맞추어 주는것은 아주 간단합니다. 바꾸고 싶은 값에다 tick을 곱해주면 됩니다.
+	// 프레임마다 2*tick만큼 움직인다고 하면, 
+	// 60FPS일땐 한 프레임에 2/60만큼씩 움직이고, 1초가 지나면 2만큼 이동하게 됩니다.
+	// 144FPS일땐 한 프레임에 2/144만큼씩 움직이고, 1초가 지나면 동일하게 2만큼 이동하게 됩니다.
+	
+	// 이전 코드에서는 프레임마다 2만큼 이동하였으니 결과적으로 1초에 대략 2*60만큼 이동했습니다.
+	// 따라서 지금 코드에서 유사하게 동작하게 하려면 속도를 약 120으로 해주어야 할겁니다.
+	// 이 숫자도 외부에서 매개변수로 받도록 수정합니다.
 
-	if (IsKeyDown(KEY_D)) playerPosition.x += 2;
-	else if (IsKeyDown(KEY_A)) playerPosition.x -= 2;
+	if (IsKeyDown(KEY_D)) playerPosition.x += playerSpeed * tick;
+	else if (IsKeyDown(KEY_A)) playerPosition.x -= playerSpeed * tick;
 
-	if (IsKeyDown(KEY_W)) playerPosition.y -= 2;
-	else if (IsKeyDown(KEY_S)) playerPosition.y += 2;
+	if (IsKeyDown(KEY_W)) playerPosition.y -= playerSpeed * tick;
+	else if (IsKeyDown(KEY_S)) playerPosition.y += playerSpeed * tick;
 }
 
-void UpdateEnemy(float enemySpeed, Vector2* enemyPosition, int enemyCount, const Vector2& playerPosition)
+void UpdateEnemy(float tick, float enemySpeed, Vector2* enemyPosition, int enemyCount, const Vector2& playerPosition)
 {
 	// playerPositionX & Y는 변하지 않는 값이기 때문에 복사해서 받습니다. const 참조자로 받아도 되지만, 기본 자료형이니 굳이 그럴 필요가 없습니다.
 
@@ -33,8 +40,8 @@ void UpdateEnemy(float enemySpeed, Vector2* enemyPosition, int enemyCount, const
 		vectorX = vectorX / length; // 길이가 1인 벡터의 x방향 성분
 		vectorY = vectorY / length; // 길이가 1인 벡터의 y방향 성분
 
-		enemyPosition[i].x += vectorX * enemySpeed; // speed 만큼의 속도로 player쪽으로 이동하게 됩니다
-		enemyPosition[i].y += vectorY * enemySpeed;
+		enemyPosition[i].x += vectorX * enemySpeed * tick; // speed 만큼의 속도로 player쪽으로 이동하게 됩니다
+		enemyPosition[i].y += vectorY * enemySpeed * tick;
 	}
 	
 
@@ -69,12 +76,13 @@ int main() {
 	Vector2 playerPosition = Vector2{ 10,10 };
 	const Vector2 playerSize = Vector2{ 20,20 };
 	const Color playerColor = Color{ 238, 108, 77, 255 };
+	const float playerSpeed = 120.0f;
 
 	//--- 화면에 그릴 적 관련 변수
 	const float enemyCount = 10; // 적은 10 마리를 그릴 예정입니다. 배열 크기로 사용하기 위해 const 여야 한다는 것을 잊지 마세요
 	// 이번 장에서는 적의 X와 Y위치를 힙 메모리에 저장해 봅시다. 사실 크게 바뀔 건 없죠? 대신, 해제 부분을 절대 잊으시면 안됩니다.
 	Vector2* enemyPosition = new Vector2[enemyCount];
-	const float enemySpeed = 1.5f; // enemy는 player보다 약간 느린 속도로 움직입니다.
+	const float enemySpeed = 80.0f; // tick을 고려해 속도 스케일 자체가 바뀌었으니(UpdatePlayer 참고) 같이 바꿔줍시다.
 	const float enemyRadius = 10; // 적은 동그라미로 그릴 것이라 width/height 대신 반지름이 필요합니다.
 	const Color enemyColor = Color{ 200, 150, 255, 255 };
 
@@ -95,13 +103,16 @@ int main() {
 		// 여기에서도 이렇게 두 부분으로 구분해서 구현할 것이며, 중괄호, 들여쓰기 등은 문법적으로 의미는 없고, 보기 좋게 하기위해 들어간 것입니다.
 
 		{ // 데이터 조작 (Update)
+			// 일반적으로 게임에서 "시간"의 고려는 매우 중요합니다. 간단한 예로 살펴 보겠습니다.
+			// 이전 코드에서 위의 SetTargetFPS(144)로 코드를 바꿔보셨다면 게임 전체 속도가 빨라지는 것을 볼 수 있습니다.
+			// 프레임 속도가 빨라진다고 게임 자체가 빨라지는 것은 올바르지 않습니다.
+			// 따라서 프레임 속도를 반영해서 캐릭터들을 움직여야 하고, 이를 위해서는 매 while문마다 시간이 얼마나 흘렀는지 알아야 합니다.
+			// 이러한 기능이 꼭 필요하기 때문에 일반적으로 게임 엔진에서는 while문이 한번 돌때마다 시간이 얼마나 걸렸는지를 반환해 줍니다.
+			float tick = GetFrameTime(); // FPS가 60이라면 1/60, 144라면 1/144에 가까운 값이 반환됩니다.
 
-			// 이제 키보드를 사용해 플레이어를 움직일 수 있습니다. Update() 함수에서 이에 대한 처리를 담당합니다.
-			// Update 함수 안에서 playerPositionX, playerPositionY 변수의 값을 바꾸어야 하니, 참조자로 넘겨줍니다.
-			UpdatePlayer(playerPosition);
-
-			// 이제 적들도 움직입니다.
-			UpdateEnemy(enemySpeed, enemyPosition, enemyCount, playerPosition);
+			// tick값을 Update함수들에 인자로 넣어줍니다. speed도 매개변수로 추가해 주었습니다.
+			UpdatePlayer(tick, playerSpeed, playerPosition);
+			UpdateEnemy(tick, enemySpeed, enemyPosition, enemyCount, playerPosition);
 		}
 
 		{ // 그리기 (Draw)
@@ -127,6 +138,4 @@ int main() {
 
 //--- Practice
 
-// 1. enemySpeed와 enemyRadius도 2개의 값인데, Vector2로 바꾸어 주지 않았습니다. 제가 왜 그랬을까요?
-// 2. Vector2 말고 라이브러리에서 제공하는 다른 구조체는 또 무엇이 있는지 찾아 보세요.
-// 3. SetTargetFPS(120)으로 값을 바꾸어 플레이 해보세요. 뭐가 어떻게 바뀐것인지 이해해 보세요.
+// 1. tick을 이동 속도에 올바로 반영하고 나면, SetTargetFPS()의 숫자가 얼마던간 동일한 속도로 움직입니다. 직접 확인해보세요.
