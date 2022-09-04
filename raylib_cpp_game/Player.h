@@ -8,7 +8,8 @@
 class Player
 {
 public:
-	Player(const Vector2& position, const Vector2& size, const Color& color, float speed);
+	// 플레이어를 그리기 위해 색상 대신, 이미지를 활용할 것입니다.
+	Player(const Vector2& position, const Vector2& size, const Texture2D& tex, int row, int col, float speed);
 	void Update(float tick);
 	void Draw() const;
 	Vector2 GetPosition() const;
@@ -23,7 +24,8 @@ private:
 private:
 	Vector2 position;
 	Vector2 size;
-	Color color;
+	Texture2D tex; // Texture2D 이미지에 대한 참조
+	Rectangle sourceRect; // row, col 정보를 사용해 어떤 이미지를 가져와 그릴것인지 설정합니다. 생성자를 참고하세요.
 	float speed;
 
 	Bullet bullets[50]; // (우선은) 발사된 총알은 Player 멤버 변수로 두고 관리합니다.
