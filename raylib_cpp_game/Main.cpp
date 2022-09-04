@@ -1,13 +1,20 @@
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include "raylib.h"
 #include "raymath.h" // sqrt 계산을 위해 math 라이브러리도 사용합니다.
 
 #include "Player.h"
-#include "Enemy.h"
+#include "EnemyManager.h"
 
 // 화면에 그릴 수 있는 여러가지는 https://www.raylib.com/cheatsheet/cheatsheet.html 사이트를 참고하세요
 // 빌드 결과 .exe 파일은 "CPP_Practice_Game/bin/Debug 또는 Release 폴더 안에 들어가게 되어 있습니다.
 
 int main() {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // 점점 메모리 관리가 복잡해지고 있으니, 메모리 누수를 탐지하는 코드를 추가하겠습니다.
+	//_CrtSetBreakAlloc(1453);
+
 	int screenWidth = 800;
 	int screenHeight = 450;
 
@@ -24,14 +31,14 @@ int main() {
 	// 이제 플레이어를 삼각형, 사각형이 아닌 이미지를 불러와서 표시할 것입니다.
 	Player player = Player{ Vector2{10,10}, Vector2{30,30}, shipsTexture, 0, 1, 120.0f };
 
-	//--- 적(들) 
-	const float enemyCount = 10; 
-	Enemy* enemies = new Enemy[enemyCount];
+	//--- 적 매니저
+	EnemyManager enemyManger;
 	
-	for (int i = 0; i < enemyCount; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		Vector2 randomEnemyPosition = Vector2{ screenWidth - 20.0f, (float)GetRandomValue(0, screenHeight) };
-		enemies[i] = Enemy{ randomEnemyPosition, Vector2{10.0f,10.0f}, Color{ 200, 150, 255, 255 }, 80.0f };
+		// SpawnEnemy를 호출해서 생성한 적을 enemyManger가 가지고있는 포인터 멤버 변수에 저장해둡니다.
+		enemyManger.SpawnEnemy(new Enemy{ randomEnemyPosition, Vector2{10.0f,10.0f}, Color{ 200, 150, 255, 255 }, 80.0f });
 	}
 
 	//--- 배경색과 사각형의 색상을 바꾸지 않는다고 하면, 상수로 선언
@@ -47,12 +54,7 @@ int main() {
 
 			player.Update(tick); // 플레이어 & 총알 Update()
 
-			for (int i = 0; i < enemyCount; i++)
-			{
-				// 각 적의 개별적인 움직임은, 각 적 객체의 Update() 함수 내부에 구현되어 있습니다.
-				// 그 멤버함수는 멤버변수 데이터를 기반으로 움직임 로직을 수행합니다.
-				enemies[i].Update(tick, player.GetPosition()); 
-			}
+			enemyManger.Update(tick, player.GetPosition()); // 적 Update()
 		}
 
 		{ // 그리기 (Draw)
@@ -62,24 +64,18 @@ int main() {
 
 			player.Draw(); // 플레이어 & 총알 그리기
 
-			// 적(들) 그리기
-			for (int i = 0; i < enemyCount; i++)
-			{
-				// 마찬가지로 각 적의 그리는 법은 Draw() 함수 내부에 구현되어 있습니다.
-				enemies[i].Draw();
-			}
+			enemyManger.Draw(); // 적 그리기
 
 			EndDrawing();
 		}
 	}
 
 	{
-		// 메모리 해제는 절대 잊으시면 안됩니다!
-		delete[] enemies;
-
 		// 텍스처 자원도 사용이 끝나면 해제해 주어야 합니다.
 		UnloadTexture(shipsTexture);
 		UnloadTexture(projectileTexture);
+
+		CloseWindow(); // 메모리 누수 탐지를 하다보니, 이 코드가 빠져있어서 누수가 발생하고 있다는 것을 알았습니다 ㅜㅜ 추가해줍시다.
 	}
 
 	return 0;
@@ -87,7 +83,6 @@ int main() {
 
 //--- Practice
 
-// 1. Player를 그릴 때, DrawTexturePro() 함수에서 rotation도 인자로 받습니다. 한번 적용해 보세요. 
-// 2. 플레이어 움직임에 반응해서 rotation을 적용하는 방식을 고민해보세요.
-// 3. Enemy도 그림을 보고 마음에 드는 것을 골라서 화면에 그려지도록 코드를 수정해보세요.
-// 4. Bullet도 마찬가지로 수정해 보세요. Bullet에 적절한 이미지는 projectileTexture에 있습니다.
+// 1. 적이 한꺼번에 생성되지 않고, 몇 초에 한번씩 생성되도록 코드를 바꿔 보세요.
+// 2. Enemy의 update 로직에 player 정보가 필요하기 때문에 EnemyManager의 Update()에만 플레이어 위치를 인자로 넘겨주고 있습니다. 
+//    이걸 없앨 수 있는 방법이 뭐가 있을까요? (주의! 없애는 것이 항상 더 좋다는 뜻은 아닙니다.)
