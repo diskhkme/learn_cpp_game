@@ -27,14 +27,8 @@ void Enemy::Draw() const
 
 void Enemy::Move(float tick, const Vector2& playerPosition)
 {
-	float vectorX = playerPosition.x - position.x;
-	float vectorY = playerPosition.y - position.y;
-
-	float length = sqrt(vectorX * vectorX + vectorY * vectorY);
-
-	vectorX = vectorX / length;
-	vectorY = vectorY / length;
-
-	position.x += vectorX * speed * tick;
-	position.y += vectorY * speed * tick;
+	Vector2 direction = Vector2Subtract(playerPosition, position);
+	Vector2 normalizedDirection = Vector2Normalize(direction); // 벡터의 길이를 1로 정규화, Vector2Normalize
+	
+	position = Vector2Add(position, Vector2Scale(normalizedDirection, speed*tick));
 }

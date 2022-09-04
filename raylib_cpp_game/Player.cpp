@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include "raymath.h"
+
 // Player 클래스의 구현
 
 Player::Player(const Vector2& position, const Vector2& size, const Color& color, float speed)
@@ -8,8 +10,9 @@ Player::Player(const Vector2& position, const Vector2& size, const Color& color,
 
 void Player::Update(float tick) 
 {
-	// Update 로직을 약간 수정해서, 적절한 입력이 들어올 경우 Move 그리고 Shoot을 하도록 합시다.
-	// 이렇게 수정하는 이유는 입력(키보드 & 마우스)을 한 곳에서 처리하도록 하기 위함입니다.
+	// raymath에서 제공하는 벡터 계산 기능을 사용해서 코드를 조금 더 단축시켜 봅시다.
+	// raymath는 c언어 기반으로 작성되었기 때문에 약간 보기에는 불편한 면이 있기도 하지만, 필요한 계산 기능이 모두 구현되어 있으니 편합니다.
+
 	Vector2 moveInput = Vector2{ 0,0 };
 	if (IsKeyDown(KEY_D)) moveInput.x = 1.0f;
 	else if (IsKeyDown(KEY_A)) moveInput.x = -1.0f;
@@ -18,10 +21,10 @@ void Player::Update(float tick)
 
 	Move(tick, moveInput);
 
-	if (IsMouseButtonPressed(0)) // IsMouseButtonPressed로 mouse가 눌렸는지 아닌지를 알 수 있습니다.
+	if (IsMouseButtonPressed(0)) 
 	{
-		Vector2 cursorPosition = GetMousePosition(); //GetMousePosition으로 커서의 위치를 얻어올 수 있습니다.
-		Vector2 direction = { cursorPosition.x - position.x, cursorPosition.y - position.y }; // 커서 위치에서 플레이어 위치(position)을 빼면, 방향 벡터가 됩니다.
+		Vector2 cursorPosition = GetMousePosition(); 
+		Vector2 direction = Vector2Subtract(cursorPosition, position); // Vector2끼리의 뺄셈연산, Vector2Substract
 
 		Shoot(direction);
 	}
@@ -46,8 +49,8 @@ Vector2 Player::GetPosition() const
 
 void Player::Move(float tick, Vector2 moveInput) 
 {
-	position.x += moveInput.x * speed * tick;
-	position.y += moveInput.y * speed * tick;
+	Vector2 positionDelta = Vector2Scale(moveInput, speed*tick); // Vector의 각 요소에 상수 곱하기, Vector2Scale
+	position = Vector2Add(position, positionDelta); // 두 벡터 더하기, Vector2Add
 }
 
 void Player::Shoot(Vector2 shootDirection)
