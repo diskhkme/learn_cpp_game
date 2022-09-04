@@ -4,9 +4,18 @@
 
 // Player 클래스의 구현
 
-Player::Player(const Vector2& position, const Vector2& size, const Color& color, float speed)
-	: position{ position }, size{ size }, color{ color }, speed{ speed }, bulletCount{ 0 }
-{}
+Player::Player(const Vector2& position, const Vector2& size, const Texture2D& tex, int row, int col, float speed)
+	: position{ position }, tex{ tex }, size{ size }, speed{ speed }, bulletCount{ 0 }
+{
+	// tex 이미지의 각 요소는 8픽셀 크기입니다. 따라서 지정한 row, col에 8을 곱해주면,
+	// 내가 사용하려는 이미지의 좌상단 좌표값을 얻을 수 있습니다.
+	float texXStart = col * 8.0f;
+	float texYStart = row * 8.0f;
+
+	// Rectangle 구조체는 x좌표, y좌표, 넓이, 높이 네 개의 값을 갖는 구조체입니다.
+	// 내가 사용할 이미지는 texXStart, texYStart가 좌상단인 8x8 크기의 픽셀입니다.
+	sourceRect = Rectangle{ texXStart, texYStart, 8.0f, 8.0f };
+}
 
 void Player::Update(float tick) 
 {
@@ -35,8 +44,15 @@ void Player::Update(float tick)
 
 void Player::Draw() const 
 {
-	DrawRectangle(position.x, position.y, size.x, size.y, color);
-	DrawRectangleLines(position.x, position.y, size.x, size.y, BLACK); // 테두리 그리기
+	// 화면에 이미지를 그릴 대상 위치는 position(플레이어의 위치)이 좌상단인,
+	// size 크기의 사각형입니다.
+	Rectangle destRect = Rectangle{ position.x, position.y, size.x, size.y };
+	Vector2 origin = Vector2{ size.x / 2.0f, size.y / 2.0f };
+	
+	// 이제 DrawRectangle대신 DrawTextureRec를 사용해서 플레이어를 그립니다.
+	// tex로부터 sourceRect만큼을 떼어와서(?) destRect로 정의된 사각형에 그립니다.
+	// destRect가 더 크기 때문에 이미지 크기가 늘어가게 됩니다.
+	DrawTexturePro(tex, sourceRect, destRect, origin, 0.0f, WHITE);
 
 	// 총알의 Draw도 호출해 주어야 합니다.
 	DrawBullets();

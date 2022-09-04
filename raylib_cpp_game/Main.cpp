@@ -16,8 +16,13 @@ int main() {
 
 	SetTargetFPS(60); 
 
+	// 텍스처 리소스 Load
+	Texture2D shipsTexture = LoadTexture("Resources/SpaceShooterAssetPack_Ships.png");
+	Texture2D projectileTexture = LoadTexture("Resources/SpaceShooterAssetPack_Projectiles.png");
+
 	//--- 플레이어
-	Player player = Player{ Vector2{10,10}, Vector2{20,20}, Color{238, 108, 77, 255}, 120.0f };
+	// 이제 플레이어를 삼각형, 사각형이 아닌 이미지를 불러와서 표시할 것입니다.
+	Player player = Player{ Vector2{10,10}, Vector2{30,30}, shipsTexture, 0, 1, 120.0f };
 
 	//--- 적(들) 
 	const float enemyCount = 10; 
@@ -30,7 +35,7 @@ int main() {
 	}
 
 	//--- 배경색과 사각형의 색상을 바꾸지 않는다고 하면, 상수로 선언
-	const Color backgroundColor = Color{ 224, 251, 252, 255 };
+	const Color backgroundColor = Color{ 0, 0, 0, 255 };
 	
 
 	// 창을 닫을 때까지 while 반복문을 돌면서 화면을 그리기 위한 함수들을 호출
@@ -71,6 +76,10 @@ int main() {
 	{
 		// 메모리 해제는 절대 잊으시면 안됩니다!
 		delete[] enemies;
+
+		// 텍스처 자원도 사용이 끝나면 해제해 주어야 합니다.
+		UnloadTexture(shipsTexture);
+		UnloadTexture(projectileTexture);
 	}
 
 	return 0;
@@ -78,4 +87,7 @@ int main() {
 
 //--- Practice
 
-// 1. Vector2와 관련한 다른 어떤 계산 기능들이 제공되는지 알아보세요.
+// 1. Player를 그릴 때, DrawTexturePro() 함수에서 rotation도 인자로 받습니다. 한번 적용해 보세요. 
+// 2. 플레이어 움직임에 반응해서 rotation을 적용하는 방식을 고민해보세요.
+// 3. Enemy도 그림을 보고 마음에 드는 것을 골라서 화면에 그려지도록 코드를 수정해보세요.
+// 4. Bullet도 마찬가지로 수정해 보세요. Bullet에 적절한 이미지는 projectileTexture에 있습니다.
