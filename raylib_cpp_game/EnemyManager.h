@@ -5,7 +5,6 @@
 #include "Enemy.h"
 
 // EnemyManger, 화면에 나오는 Enemy들을 전체적으로 관리합니다.
-// 우선은 기존의 main에서 관리하던 Enemy 관련 코드를 이곳으로 옮기는 형식으로 만들어보겠습니다.
 class EnemyManager
 {
 public:

@@ -2,23 +2,16 @@
 
 #include "raylib.h"
 
-// Bullet 클래스의 정의
-// 마우스를 클릭하면 Bullet이 플레이어 위치에서 마우스 쪽으로 발사됩니다.
-class Bullet
+#include "Entity.h"
+
+// Bullet 클래스의 정의. Entity의 유도 클래스
+// Bullet은 현재 생성되면 날아가기만 하면 되기 때문에 Entity와 별로 다를것이 없습니다.
+class Bullet : public Entity
 {
 public:
-	Bullet(); 
-	Bullet(const Vector2& position, const Vector2& direction, const Vector2& size, const Color& color, float speed);
-	void Update(float tick);
-	void Draw() const;
+	Bullet();
+	Bullet(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction);
 
 private:
-	void Move(float tick);
 
-private:
-	Vector2 position;
-	Vector2 direction;
-	Vector2 size;
-	Color color;
-	float speed;
 };

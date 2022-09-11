@@ -3,32 +3,19 @@
 #include "raymath.h"
 
 Enemy::Enemy()
-	:Enemy{Vector2{0,0}, Vector2{0,0}, Color{0,0,0,0}, 0.0f} // 아래 생성자를 위임으로 호출
+	: Entity{ Vector2{0,0}, Vector2{0,0}, nullptr, 0, 0, 0, Vector2{0,0} } // 중간의 nullptr 사용에 주의하세요.
 {
 }
 
-Enemy::Enemy(const Vector2 & position, const Vector2 & size, const Color & color, float speed)
-	: position{ position }, size{ size }, color{ color }, speed{ speed }
+Enemy::Enemy(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction)
+	: Entity{ position, size, tex, row, col, speed, direction }
 {
-	// 사실 적은 Circle이기 때문에 size값은 radius 하나만 필요하지만, 통일성을 위해서 그냥 Vector2 size로 받고, x값만 사용합시다.
+	// Enemy의 생성은 Entity에 위임하고, 첫 인자로 Entity Type 열거자를 넣어줍니다.
 }
 
+// Enemy의 Update는 playerPosition을 기반으로 하여 Update함수를 재정의하였습니다.
 void Enemy::Update(float tick, const Vector2 & playerPosition)
 {
-	Move(tick, playerPosition);
-}
-
-void Enemy::Draw() const
-{
-	DrawCircle(position.x, position.y, size.x, color);
-	DrawCircleLines(position.x, position.y, size.x, BLACK);
-
-}
-
-void Enemy::Move(float tick, const Vector2& playerPosition)
-{
-	Vector2 direction = Vector2Subtract(playerPosition, position);
-	Vector2 normalizedDirection = Vector2Normalize(direction); // 벡터의 길이를 1로 정규화, Vector2Normalize
-	
-	position = Vector2Add(position, Vector2Scale(normalizedDirection, speed*tick));
+	UpdateDirection(Vector2Normalize(Vector2Subtract(playerPosition, position))); // 플레이어 위치에 따라 방향을 바꿔주고
+	Entity::Update(tick); // 그 방향에 따라 이동합니다. Entity의 Update() 함수를 직접 호출합니다.
 }
