@@ -4,10 +4,10 @@
 
 // Player 클래스의 구현
 
-Player::Player(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction)
-	: Entity{position, size, tex, row, col, speed, direction}
+Player::Player(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction, int maxHP)
+	: Actor{position, size, tex, row, col, speed, direction, maxHP }
 {
-	// Player의 생성은 Entity에 위임하고, 첫 인자로 Player Type 열거자를 넣어줍니다.
+	// Player의 생성은 Actor에 위임합니다.
 }
 
 void Player::Update(float tick) 
@@ -35,7 +35,7 @@ void Player::Update(float tick)
 
 void Player::Draw() const
 {
-	Entity::Draw();
+	Actor::Draw();
 	DrawBullets(); // Player가 관리하므로, bullet의 Draw도 호출해 주어야 합니다.
 }
 

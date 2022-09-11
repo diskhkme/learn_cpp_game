@@ -3,14 +3,14 @@
 #include "raymath.h"
 
 Enemy::Enemy()
-	: Entity{ Vector2{0,0}, Vector2{0,0}, nullptr, 0, 0, 0, Vector2{0,0} } // 중간의 nullptr 사용에 주의하세요.
+	: Actor{ Vector2{0,0}, Vector2{0,0}, nullptr, 0, 0, 0, Vector2{0,0}, 0 } // 중간의 nullptr 사용에 주의하세요.
 {
 }
 
-Enemy::Enemy(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction)
-	: Entity{ position, size, tex, row, col, speed, direction }
+Enemy::Enemy(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction, int maxHP)
+	: Actor{ position, size, tex, row, col, speed, direction, maxHP }
 {
-	// Enemy의 생성은 Entity에 위임하고, 첫 인자로 Entity Type 열거자를 넣어줍니다.
+	// Enemy의 생성은 Actor에 위임합니다.
 }
 
 // Enemy의 Update는 playerPosition을 기반으로 하여 Update함수를 재정의하였습니다.

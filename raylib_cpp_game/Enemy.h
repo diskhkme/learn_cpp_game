@@ -2,14 +2,14 @@
 
 #include "raylib.h"
 
-#include "Entity.h"
+#include "Actor.h"
 
 // Enemy 클래스의 정의. Entity의 유도 클래스
-class Enemy : public Entity
+class Enemy : public Actor
 {
 public:
 	Enemy();
-	Enemy(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction);
+	Enemy(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction, int maxHP);
 
 	void Update(float tick, const Vector2& playerPosition);
 private:

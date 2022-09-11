@@ -2,14 +2,14 @@
 
 #include "raylib.h"
 
-#include "Entity.h"
+#include "Actor.h"
 #include "Bullet.h"
 
 // Player 클래스의 정의, 이제 플레이어는 Entity의 유도 클래스입니다.
-class Player : public Entity
+class Player : public Actor
 {
 public:
-	Player(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction);
+	Player(const Vector2& position, const Vector2& size, Texture2D* tex, int row, int col, float speed, Vector2 direction, int maxHP);
 	void Update(float tick);
 	void Draw() const;
 	Vector2 GetPosition() const;

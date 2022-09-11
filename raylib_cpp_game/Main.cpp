@@ -28,7 +28,7 @@ int main() {
 
 	//--- 플레이어
 	// 이제 플레이어를 삼각형, 사각형이 아닌 이미지를 불러와서 표시할 것입니다.
-	Player player = Player{ Vector2{10,10}, Vector2{30,30}, &shipsTexture, 0, 1, 120.0f, Vector2{0,0} };
+	Player player = Player{ Vector2{10,10}, Vector2{30,30}, &shipsTexture, 0, 1, 120.0f, Vector2{0,0}, 100 };
 	player.SetWeapon(Vector2{ 10,10 }, &projectileTexture, 0, 3, 500.0f);
 
 	//--- 적 매니저
@@ -38,7 +38,7 @@ int main() {
 	{
 		Vector2 randomEnemyPosition = Vector2{ screenWidth - 20.0f, (float)GetRandomValue(0, screenHeight) };
 		// SpawnEnemy를 호출해서 생성한 적을 enemyManger가 가지고있는 포인터 멤버 변수에 저장해둡니다.
-		enemyManger.SpawnEnemy(new Enemy{ randomEnemyPosition, Vector2{30.0f,30.0f}, &shipsTexture,  0, 9, 80.0f, Vector2{0,0} });
+		enemyManger.SpawnEnemy(new Enemy{ randomEnemyPosition, Vector2{30.0f,30.0f}, &shipsTexture,  0, 9, 80.0f, Vector2{0,0}, 50 });
 	}
 
 	//--- 배경색과 사각형의 색상을 바꾸지 않는다고 하면, 상수로 선언
@@ -83,7 +83,3 @@ int main() {
 
 //--- Practice
 
-// 1. Entity라는 공통 타입으로 모든 객체를 관리하려면 어떻게 할 수 있을까요?
-//	  예를들어 현재 player.Update(), enemyManager.Update()를 별도로 호출하고 있는데, 어차피 플레이어나 적이나 다 같은 Entity이니,
-//    한 번에 모두 관리할 수는 없을까요?
-// 2. Player가 Bullet을 소유하고 있는 형태입니다. Enemy처럼 BulletManager를 별도로 만들어 관리하면 어떤 장점/단점이 있을까요?
