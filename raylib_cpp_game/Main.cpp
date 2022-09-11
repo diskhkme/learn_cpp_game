@@ -9,11 +9,10 @@
 #include "EnemyManager.h"
 
 // 화면에 그릴 수 있는 여러가지는 https://www.raylib.com/cheatsheet/cheatsheet.html 사이트를 참고하세요
-// 빌드 결과 .exe 파일은 "CPP_Practice_Game/bin/Debug 또는 Release 폴더 안에 들어가게 되어 있습니다.
 
 int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // 점점 메모리 관리가 복잡해지고 있으니, 메모리 누수를 탐지하는 코드를 추가하겠습니다.
-	//_CrtSetBreakAlloc(1453);
+	//_CrtSetBreakAlloc(1453); // 누수가 있는 경우 그 블럭으로 이동해 체크해 볼 수 있습니다.
 
 	int screenWidth = 800;
 	int screenHeight = 450;
@@ -24,8 +23,8 @@ int main() {
 	SetTargetFPS(60); 
 
 	// 텍스처 리소스 Load
-	Texture2D shipsTexture = LoadTexture("Resources/SpaceShooterAssetPack_Ships.png");
-	Texture2D projectileTexture = LoadTexture("Resources/SpaceShooterAssetPack_Projectiles.png");
+	Texture2D shipsTexture = LoadTexture("../Resources/SpaceShooterAssetPack_Ships.png");
+	Texture2D projectileTexture = LoadTexture("../Resources/SpaceShooterAssetPack_Projectiles.png");
 
 	//--- 플레이어
 	// 이제 플레이어를 삼각형, 사각형이 아닌 이미지를 불러와서 표시할 것입니다.
@@ -75,7 +74,7 @@ int main() {
 		UnloadTexture(shipsTexture);
 		UnloadTexture(projectileTexture);
 
-		CloseWindow(); // 메모리 누수 탐지를 하다보니, 이 코드가 빠져있어서 누수가 발생하고 있다는 것을 알았습니다 ㅜㅜ 추가해줍시다.
+		CloseWindow();
 	}
 
 	return 0;
