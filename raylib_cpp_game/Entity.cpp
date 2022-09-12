@@ -2,8 +2,12 @@
 
 #include "raymath.h"
 
-// Texture2D를 참조자에서 포인터로 바꾼 것에 주목하십시오.
-// Bullet의 경우 이러한 수정이 없으면 배열로 초기화 시키기 어려울 겁니다. (이유가 뭘까요?)
+Entity::Entity()
+	:Entity{ Vector2{0,0}, Vector2{0,0}, nullptr, 0, 0, 0.0f, Vector2{0,0} }
+{
+
+}
+
 Entity::Entity(const Vector2 & position, const Vector2 & size, Texture2D* tex, int row, int col, float speed, Vector2 direction)
 	: position { position }, size{ size }, tex{ tex }, speed{ speed }, direction{direction}
 {

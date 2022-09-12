@@ -7,6 +7,7 @@
 
 #include "Player.h"
 #include "EnemyManager.h"
+#include "Scene.h"
 
 // 화면에 그릴 수 있는 여러가지는 https://www.raylib.com/cheatsheet/cheatsheet.html 사이트를 참고하세요
 
@@ -26,19 +27,18 @@ int main() {
 	Texture2D shipsTexture = LoadTexture("../Resources/SpaceShooterAssetPack_Ships.png");
 	Texture2D projectileTexture = LoadTexture("../Resources/SpaceShooterAssetPack_Projectiles.png");
 
-	//--- 플레이어
-	// 이제 플레이어를 삼각형, 사각형이 아닌 이미지를 불러와서 표시할 것입니다.
+	//--- Scene
+	Scene scene;
 	Player player = Player{ Vector2{10,10}, Vector2{30,30}, &shipsTexture, 0, 1, 120.0f, Vector2{0,0}, 100 };
 	player.SetWeapon(Vector2{ 10,10 }, &projectileTexture, 0, 3, 500.0f);
-
-	//--- 적 매니저
-	EnemyManager enemyManger;
 	
+	scene.AddEntity(&player);
+
 	for (int i = 0; i < 10; i++)
 	{
 		Vector2 randomEnemyPosition = Vector2{ screenWidth - 20.0f, (float)GetRandomValue(0, screenHeight) };
 		// SpawnEnemy를 호출해서 생성한 적을 enemyManger가 가지고있는 포인터 멤버 변수에 저장해둡니다.
-		enemyManger.SpawnEnemy(new Enemy{ randomEnemyPosition, Vector2{30.0f,30.0f}, &shipsTexture,  0, 9, 80.0f, Vector2{0,0}, 50 });
+		scene.AddEntity(new Enemy{ randomEnemyPosition, Vector2{30.0f,30.0f}, &shipsTexture,  0, 9, 80.0f, Vector2{0,0}, 50 });
 	}
 
 	//--- 배경색과 사각형의 색상을 바꾸지 않는다고 하면, 상수로 선언
@@ -52,9 +52,7 @@ int main() {
 			
 			float tick = GetFrameTime(); // FPS가 60이라면 1/60, 144라면 1/144에 가까운 값이 반환됩니다.
 
-			player.Update(tick); // 플레이어 & 총알 Update()
-
-			enemyManger.Update(tick, player.GetPosition()); // 적 Update()
+			scene.UpdateScene(tick);
 		}
 
 		{ // 그리기 (Draw)
@@ -62,9 +60,7 @@ int main() {
 
 			ClearBackground(backgroundColor); // 배경 그리기
 
-			player.Draw(); // 플레이어 & 총알 그리기
-
-			enemyManger.Draw(); // 적 그리기
+			scene.DrawScene();
 
 			EndDrawing();
 		}
